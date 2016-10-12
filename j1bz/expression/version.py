@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .version import __version__
-
 __all__ = ['__version__']
+
+#: project version
+__version__ = '0.0.1'
