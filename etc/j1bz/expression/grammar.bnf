@@ -1,0 +1,101 @@
+(* KEYWORDS *)
+
+@@keyword :: TRUE FALSE NULL
+@@keyword :: AND OR
+@@keyword :: IN NIN LIKE
+@@keyword :: INSERT CREATE SELECT UPDATE DELETE
+@@keyword :: INTO VALUES WHERE GROUP ORDER BY ASC DESC LIMIT WITH
+
+(*/KEYWORDS *)
+
+(* TYPES *)
+true::true = "TRUE" ;
+false::false = "FALSE" ;
+digits::digits = value:/[0-9]+/ ;
+characters::characters = value:/\w*/ ;
+
+string::forward_value = '"' value:characters '"' | "'" value:characters "'" ;
+sign::sign = value:( "+" | "-" ) ;
+integer::integer = [ sign:sign ] value:digits ;
+floating::floating = [ sign:sign ] intpart:digits "." floatpart:digits ;
+boolean::forward_value = value:( true | false ) ;
+none::none = "NULL";
+(*/TYPES *)
+
+(* GENERIC *)
+@name
+name::name = value:( /[_a-zA-Z][_a-zA-Z0-9]*(\.[_a-zA-Z][_a-zA-Z0-9]*)*/ ) ;
+as::forward_value = "AS" value:name ;
+
+expression::expression = name:name [ as:as ] ;
+function::function = f:name "(" args:",".{ value } ")" [ as:as ] ;
+
+value::forward_value = value:( function | expression | string | floating | integer | boolean | none | crud ) ;
+identifier::forward_value = value:( function | expression ) ;
+(*/GENERIC *)
+
+(* CONDITION *)
+compterm::forward_value = value:value ;
+compop::compop = value:( "<=" | "<" | "=" | "!=" | ">=" | ">" | "IN" | "NIN" | "LIKE" ) ;
+compexpr_core::compexpr = left:compterm [ compop:compop right:compterm ] ;
+compexpr::forward_value = "(" value:compexpr_core ")" | value:compexpr_core ;
+
+condop::condop = value:( "AND" | "OR" ) ;
+condition_core::condition = left:condition condop:condop right:condition | left:compexpr ;
+condition::forward_value = "(" value:condition_core ")" | value:condition_core ;
+(*/CONDITION *)
+
+(* CRUD GENERIC *)
+kv::kv = key:identifier ":" value:value ;
+kvs::kvs = kvs:",".{ kv }+ ;
+
+where::forward_value = "WHERE" value:condition ;
+groupby::groupby = "GROUP BY" values:",".{ name:identifier }+ ;
+sorter::sorter = name:identifier sortmod:[ "ASC" | "DESC" ] ;
+orderby::orderby = "ORDER BY" values:",".{ sorter:sorter }+ ;
+limit::forward_value = "LIMIT" value:integer ;
+with::with = "WITH" dparams:kvs ;
+(*/CRUD GENERIC *)
+
+(* CREATE *)
+create_start = "INSERT" | "CREATE" ;
+create::create = [ "INTO" name:identifier ] "VALUES" fields:kvs [ with:with ] ;
+
+create_brackets::forward_value = create_start "(" value:create ")" ;
+create_nobrackets::forward_value = create_start value:create ;
+(*/CREATE *)
+
+(* READ *)
+read_start = "READ" | "SELECT" ;
+read::read = names:",".{ identifier }+ [ where:where ] [ groupby:groupby ] [ orderby:orderby ] [ limit:limit ] [ with:with ] ;
+
+read_brackets::forward_value = read_start "(" value:read ")" ;
+read_nobrackets::forward_value = read_start value:read ;
+(*/READ *)
+
+(* UPDATE *)
+update_start = "UPDATE" ;
+update::update = [ "INTO" name:identifier ] "VALUES" fields:kvs [ where:where ] [ with:with ] ;
+
+update_brackets::forward_value = update_start "(" value:update ")" ;
+update_nobrackets::forward_value = update_start value:update ;
+(*/UPDATE *)
+
+(* DELETE *)
+delete_start = "DELETE" ;
+delete::delete = names:",".{ identifier }+ [ where:where ] [ with:with ] ;
+
+delete_brackets::forward_value = delete_start "(" value:delete ")" ;
+delete_nobrackets::forward_value = delete_start value:delete ;
+(*/DELETE *)
+
+(* REQUEST *)
+crudop_brackets::forward_value = value:( create_brackets | read_brackets | update_brackets | delete_brackets );
+crudop_nobrackets::forward_value = value:( create_nobrackets | read_nobrackets | update_nobrackets | delete_nobrackets );
+
+crud::crud = ( crudop:crudop_nobrackets | crudop:crudop_brackets [ as:as ] ) ";" ;
+
+request::forward_value = value:value $ ;
+(* REQUEST *)
+
+start = request:request ;
