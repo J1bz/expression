@@ -42,6 +42,7 @@ KEYWORDS = set([
     'NULL',
     'OR',
     'ORDER',
+    'READ',
     'SELECT',
     'TRUE',
     'UPDATE',
