@@ -33,8 +33,12 @@ def cli_interpreter(parser, walker):
         print(repr(res))
 
 
-if __name__ == '__main__':
+def main():
     parser = get_parser(semantics=ModelBuilderSemantics())
     walker = Walker()
 
     cli_interpreter(parser, walker)
+
+
+if __name__ == '__main__':
+    main()
