@@ -9,7 +9,7 @@ from j1bz.expression.walker import Walker
 from j1bz.expression.parser import get_parser
 
 
-class CrudityExpressionsTest(TestCase):
+class CrudTest(TestCase):
     def setUp(self):
         self.parser = get_parser(semantics=ModelBuilderSemantics())
         self.walker = Walker()
