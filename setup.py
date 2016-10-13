@@ -42,7 +42,7 @@ KEYWORDS = [
 
 DEPENDENCIES = []
 with open(join(BASEPATH, 'requirements.txt')) as f:
-    DEPENDENCIES = list(line for line in f.readlines())
+    DEPENDENCIES = list(line.strip() for line in f.readlines())
 
 DESCRIPTION = 'DSL expressing Crudity requests.'
 
@@ -54,6 +54,12 @@ class CustomInstall(install):
     This custom installation class drops etc conf files in PREFIX/etc.
     """
     def run(self):
+        # Here we should run this super class install.run method. But, as
+        # it is commented in the run method, a backward compatibility mode
+        # twists the behaviour we want. The expected behaviour is
+        # do_egg_install.
+        install.do_egg_install(self)
+
         def makedir_p(path):
             try:
                 makedirs(path)
@@ -74,8 +80,6 @@ class CustomInstall(install):
                 remove(f_dist)
 
             copy(join(etc, f), etc_dist)
-
-        install.run(self)
 
 setup(
     name=NAME,
