@@ -3,15 +3,13 @@
 
 from __future__ import unicode_literals
 
-from grako.model import NodeWalker, ModelBuilderSemantics
+from grako.model import NodeWalker
 
-from requester.request.expr import Expression as E, Function as F
-from requester.request.crud.create import Create
-from requester.request.crud.read import Read
-from requester.request.crud.update import Update
-from requester.request.crud.delete import Delete
-
-from _parser.sqlike import UnknownParser
+from b3j0f.requester.request.expr import Expression as E, Function as F
+from b3j0f.requester.request.crud.create import Create
+from b3j0f.requester.request.crud.read import Read
+from b3j0f.requester.request.crud.update import Update
+from b3j0f.requester.request.crud.delete import Delete
 
 
 class Walker(NodeWalker):
@@ -211,17 +209,3 @@ class Walker(NodeWalker):
 
     def walk_AST(self, node):
         return self.walk(node.request)
-
-
-if __name__ == '__main__':
-    parser = UnknownParser(semantics=ModelBuilderSemantics())
-    walker = Walker()
-
-    requests = [
-        'SELECT a;',
-    ]
-
-    for request in requests:
-        model = parser.parse(request, rule_name='start')
-        res = walker.walk(model)
-        print(repr(res))

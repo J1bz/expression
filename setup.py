@@ -74,5 +74,6 @@ setup(
         'Programming Language :: Python :: Implementation :: CPython'
     ],
     test_suite='j1bz',
+    scripts=['scripts/expression'],
     keywords=KEYWORDS
 )
