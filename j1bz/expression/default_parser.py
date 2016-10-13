@@ -456,6 +456,33 @@ class ExpressionParser(Parser):
             []
         )
 
+    @graken('kv')
+    def _strkey_value_(self):
+        self._string_()
+        self.name_last_node('key')
+        self._token(':')
+        self._value_()
+        self.name_last_node('value')
+        self.ast._define(
+            ['key', 'value'],
+            []
+        )
+
+    @graken('kvs')
+    def _strkeys_values_(self):
+
+        def sep1():
+            self._token(',')
+
+        def block1():
+            self._strkey_value_()
+        self._positive_closure(block1, sep=sep1)
+        self.name_last_node('kvs')
+        self.ast._define(
+            ['kvs'],
+            []
+        )
+
     @graken('forward_value')
     def _where_(self):
         self._token('WHERE')
@@ -530,7 +557,7 @@ class ExpressionParser(Parser):
     @graken('with')
     def _with_(self):
         self._token('WITH')
-        self._kvs_()
+        self._strkeys_values_()
         self.name_last_node('dparams')
         self.ast._define(
             ['dparams'],
@@ -891,6 +918,12 @@ class ExpressionSemantics(object):
         return ast
 
     def kvs(self, ast):
+        return ast
+
+    def strkey_value(self, ast):
+        return ast
+
+    def strkeys_values(self, ast):
         return ast
 
     def where(self, ast):

@@ -48,13 +48,15 @@ condition::forward_value = "(" value:condition_core ")" | value:condition_core ;
 (* CRUD GENERIC *)
 kv::kv = key:identifier ":" value:value ;
 kvs::kvs = kvs:",".{ kv }+ ;
+strkey_value::kv = key:string ":" value:value ;
+strkeys_values::kvs = kvs:",".{ strkey_value }+ ;
 
 where::forward_value = "WHERE" value:condition ;
 groupby::groupby = "GROUP BY" values:",".{ name:identifier }+ ;
 sorter::sorter = name:identifier sortmod:[ "ASC" | "DESC" ] ;
 orderby::orderby = "ORDER BY" values:",".{ sorter:sorter }+ ;
 limit::forward_value = "LIMIT" value:integer ;
-with::with = "WITH" dparams:kvs ;
+with::with = "WITH" dparams:strkeys_values ;
 (*/CRUD GENERIC *)
 
 (* CREATE *)
