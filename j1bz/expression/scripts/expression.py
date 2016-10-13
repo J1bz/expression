@@ -25,6 +25,9 @@ def cli_interpreter(parser, walker):
         except KeyboardInterrupt:
             break
 
+        if not cmd:
+            continue
+
         if cmd == 'QUIT':
             break
 
