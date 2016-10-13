@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from builtins import input
 
 from grako.model import ModelBuilderSemantics
+from grako.exceptions import FailedParse
 
 from j1bz.expression.walker import Walker
 from j1bz.expression.parser import get_parser
@@ -31,7 +32,12 @@ def cli_interpreter(parser, walker):
         if cmd == 'QUIT':
             break
 
-        model = parser.parse(cmd, rule_name='start')
+        try:
+            model = parser.parse(cmd, rule_name='start')
+        except FailedParse as e:
+            print('Failed to parse : {}'.format(e))
+            continue
+
         res = walker.walk(model)
         print(repr(res))
 
