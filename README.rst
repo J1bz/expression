@@ -8,6 +8,8 @@ In other words, you can write Crudity Expressions.
 Installation
 ============
 
+.. code-block:: bash
+
   aptitude install git virtualenv
 
   git clone https://github.com/J1bz/expression
@@ -35,6 +37,8 @@ How-to
 
 Quickstart
 ----------
+
+.. code-block:: python
 
   from j1bz.expression.interpreter import interpret
   res = interpret("SELECT a;")
