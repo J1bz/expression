@@ -69,11 +69,67 @@ cases).
 READ
 ~~~~
 
+.. code-block:: bash
+
+  SELECT ALL;
+  SELECT s;
+  SELECT s WHERE w;
+  SELECT s GROUP BY g;
+  SELECT s ORDER BY o;
+  SELECT s LIMIT 10;
+  SELECT s; AS mys
+
+  SELECT s WHERE wh GROUP BY g ORDER BY o LIMIT 10; AS mys
+
+  SELECT a, b, c;
+  SELECT f();
+  SELECT f(a, b, c);
+
+  SELECT s WHERE (a);
+  SELECT s WHERE (a = b);
+  SELECT s WHERE (a != b);
+  SELECT s WHERE (a > b);
+  SELECT s WHERE (a >= b);
+  SELECT s WHERE (a < b);
+  SELECT s WHERE (a <= b);
+  SELECT s WHERE (a IN b);
+  SELECT s WHERE (a NIN b);
+  SELECT s WHERE (a LIKE b);
+
+  SELECT s WHERE (a AND b);
+  SELECT s WHERE (a OR b);
+  SELECT s WHERE (a OR (b AND c));
+
+  SELECT s GROUP BY g1, g2, g3;
+
+  SELECT s ORDER BY o1, o2;
+  SELECT s ORDER BY o1 DESC, o2, o3 ASC;
+
+**Note**: ``READ`` is a synonym of ``SELECT``.
+
 UPDATE
 ~~~~~~
 
+.. code-block:: bash
+
+  UPDATE VALUES k:v;
+  UPDATE VALUES k:v WHERE w;
+  UPDATE VALUES k:v; AS myu
+
+  UPDATE INTO u VALUES k:v;
+  UPDATE INTO u VALUES k:v WHERE w;
+  UPDATE INTO u VALUES k1:v1, k2:v2;
+
 DELETE
 ~~~~~~
+
+.. code-block:: bash
+
+  DELETE d;
+  DELETE d1, d2, d3;
+  DELETE d WHERE w;
+  DELETE d1, d2, d3 WHERE w;
+  DELETE d; AS myd
 
 **Note**: Expression uses Grako (https://pypi.python.org/pypi/grako) to
 generate a parser from a grammar defined in
