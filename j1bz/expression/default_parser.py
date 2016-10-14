@@ -631,13 +631,7 @@ class ExpressionParser(Parser):
 
     @graken('forward_value')
     def _request_(self):
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._value_()
-                with self._option():
-                    self._crud_()
-                self._error('no available options')
+        self._crud_()
         self.name_last_node('value')
         self._check_eof()
         self.ast._define(

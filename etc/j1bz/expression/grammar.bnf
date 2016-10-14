@@ -72,7 +72,7 @@ delete::delete = "DELETE" names:",".{ identifier }+ [ where:where ] [ with:with 
 (* REQUEST *)
 crud::crud = crudop:( create | read | update | delete ) ";" [ as:as ] ;
 
-request::forward_value = value:( value | crud ) $ ;
+request::forward_value = value:crud $ ;
 (* REQUEST *)
 
 start = request:request ;
