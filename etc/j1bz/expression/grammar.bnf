@@ -30,7 +30,7 @@ as::forward_value = "AS" value:name ;
 expression::expression = name:name [ as:as ] ;
 function::function = f:name "(" args:",".{ value } ")" [ as:as ] ;
 
-value::forward_value = value:( function | expression | string | floating | integer | boolean | none | crud ) ;
+value::forward_value = value:( function | expression | string | floating | integer | boolean | none ) ;
 identifier::forward_value = value:( function | expression ) ;
 (*/GENERIC *)
 
@@ -54,44 +54,25 @@ with::with = "WITH" dparams:strkeys_values ;
 (*/CRUD GENERIC *)
 
 (* CREATE *)
-create_start = "INSERT" | "CREATE" ;
-create::create = [ "INTO" name:identifier ] "VALUES" fields:kvs [ with:with ] ;
-
-create_brackets::forward_value = create_start "(" value:create ")" ;
-create_nobrackets::forward_value = create_start value:create ;
+create::create = ( "CREATE" | "INSERT" ) [ "INTO" name:identifier ] "VALUES" fields:kvs [ with:with ] ;
 (*/CREATE *)
 
 (* READ *)
-read_start = "READ" | "SELECT" ;
-read::read = names:",".{ identifier }+ [ where:where ] [ groupby:groupby ] [ orderby:orderby ] [ limit:limit ] [ with:with ] ;
-
-read_brackets::forward_value = read_start "(" value:read ")" ;
-read_nobrackets::forward_value = read_start value:read ;
+read::read = ( "READ" | "SELECT" ) names:",".{ identifier }+ [ where:where ] [ groupby:groupby ] [ orderby:orderby ] [ limit:limit ] [ with:with ] ;
 (*/READ *)
 
 (* UPDATE *)
-update_start = "UPDATE" ;
-update::update = [ "INTO" name:identifier ] "VALUES" fields:kvs [ where:where ] [ with:with ] ;
-
-update_brackets::forward_value = update_start "(" value:update ")" ;
-update_nobrackets::forward_value = update_start value:update ;
+update::update = "UPDATE" [ "INTO" name:identifier ] "VALUES" fields:kvs [ where:where ] [ with:with ] ;
 (*/UPDATE *)
 
 (* DELETE *)
-delete_start = "DELETE" ;
-delete::delete = names:",".{ identifier }+ [ where:where ] [ with:with ] ;
-
-delete_brackets::forward_value = delete_start "(" value:delete ")" ;
-delete_nobrackets::forward_value = delete_start value:delete ;
+delete::delete = "DELETE" names:",".{ identifier }+ [ where:where ] [ with:with ] ;
 (*/DELETE *)
 
 (* REQUEST *)
-crudop_brackets::forward_value = value:( create_brackets | read_brackets | update_brackets | delete_brackets );
-crudop_nobrackets::forward_value = value:( create_nobrackets | read_nobrackets | update_nobrackets | delete_nobrackets );
+crud::crud = crudop:( create | read | update | delete ) ";" [ as:as ] ;
 
-crud::crud = ( crudop:crudop_nobrackets | crudop:crudop_brackets [ as:as ] ) ";" ;
-
-request::forward_value = value:value $ ;
+request::forward_value = value:( value | crud ) $ ;
 (* REQUEST *)
 
 start = request:request ;

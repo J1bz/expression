@@ -286,8 +286,6 @@ class ExpressionParser(Parser):
                     self._boolean_()
                 with self._option():
                     self._none_()
-                with self._option():
-                    self._crud_()
                 self._error('no available options')
         self.name_last_node('value')
         self.ast._define(
@@ -504,17 +502,15 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken()
-    def _create_start_(self):
-        with self._choice():
-            with self._option():
-                self._token('INSERT')
-            with self._option():
-                self._token('CREATE')
-            self._error('expecting one of: CREATE INSERT')
-
     @graken('create')
     def _create_(self):
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._token('CREATE')
+                with self._option():
+                    self._token('INSERT')
+                self._error('expecting one of: CREATE INSERT')
         with self._optional():
             self._token('INTO')
             self._identifier_()
@@ -530,46 +526,22 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('forward_value')
-    def _create_brackets_(self):
-        self._create_start_()
-        self._token('(')
-        self._create_()
-        self.name_last_node('value')
-        self._token(')')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _create_nobrackets_(self):
-        self._create_start_()
-        self._create_()
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken()
-    def _read_start_(self):
-        with self._choice():
-            with self._option():
-                self._token('READ')
-            with self._option():
-                self._token('SELECT')
-            self._error('expecting one of: READ SELECT')
-
     @graken('read')
     def _read_(self):
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._token('READ')
+                with self._option():
+                    self._token('SELECT')
+                self._error('expecting one of: READ SELECT')
 
-        def sep1():
+        def sep2():
             self._token(',')
 
-        def block1():
+        def block2():
             self._identifier_()
-        self._positive_closure(block1, sep=sep1)
+        self._positive_closure(block2, sep=sep2)
         self.name_last_node('names')
         with self._optional():
             self._where_()
@@ -591,34 +563,9 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('forward_value')
-    def _read_brackets_(self):
-        self._read_start_()
-        self._token('(')
-        self._read_()
-        self.name_last_node('value')
-        self._token(')')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _read_nobrackets_(self):
-        self._read_start_()
-        self._read_()
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken()
-    def _update_start_(self):
-        self._token('UPDATE')
-
     @graken('update')
     def _update_(self):
+        self._token('UPDATE')
         with self._optional():
             self._token('INTO')
             self._identifier_()
@@ -637,34 +584,9 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('forward_value')
-    def _update_brackets_(self):
-        self._update_start_()
-        self._token('(')
-        self._update_()
-        self.name_last_node('value')
-        self._token(')')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _update_nobrackets_(self):
-        self._update_start_()
-        self._update_()
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken()
-    def _delete_start_(self):
-        self._token('DELETE')
-
     @graken('delete')
     def _delete_(self):
+        self._token('DELETE')
 
         def sep1():
             self._token(',')
@@ -684,81 +606,24 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('forward_value')
-    def _delete_brackets_(self):
-        self._delete_start_()
-        self._token('(')
-        self._delete_()
-        self.name_last_node('value')
-        self._token(')')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _delete_nobrackets_(self):
-        self._delete_start_()
-        self._delete_()
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _crudop_brackets_(self):
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._create_brackets_()
-                with self._option():
-                    self._read_brackets_()
-                with self._option():
-                    self._update_brackets_()
-                with self._option():
-                    self._delete_brackets_()
-                self._error('no available options')
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('forward_value')
-    def _crudop_nobrackets_(self):
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._create_nobrackets_()
-                with self._option():
-                    self._read_nobrackets_()
-                with self._option():
-                    self._update_nobrackets_()
-                with self._option():
-                    self._delete_nobrackets_()
-                self._error('no available options')
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
     @graken('crud')
     def _crud_(self):
         with self._group():
             with self._choice():
                 with self._option():
-                    self._crudop_nobrackets_()
-                    self.name_last_node('crudop')
+                    self._create_()
                 with self._option():
-                    self._crudop_brackets_()
-                    self.name_last_node('crudop')
-                    with self._optional():
-                        self._as_()
-                        self.name_last_node('as_')
+                    self._read_()
+                with self._option():
+                    self._update_()
+                with self._option():
+                    self._delete_()
                 self._error('no available options')
+        self.name_last_node('crudop')
         self._token(';')
+        with self._optional():
+            self._as_()
+            self.name_last_node('as_')
         self.ast._define(
             ['as_', 'crudop'],
             []
@@ -766,7 +631,13 @@ class ExpressionParser(Parser):
 
     @graken('forward_value')
     def _request_(self):
-        self._value_()
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._value_()
+                with self._option():
+                    self._crud_()
+                self._error('no available options')
         self.name_last_node('value')
         self._check_eof()
         self.ast._define(
@@ -869,58 +740,16 @@ class ExpressionSemantics(object):
     def with_(self, ast):
         return ast
 
-    def create_start(self, ast):
-        return ast
-
     def create(self, ast):
-        return ast
-
-    def create_brackets(self, ast):
-        return ast
-
-    def create_nobrackets(self, ast):
-        return ast
-
-    def read_start(self, ast):
         return ast
 
     def read(self, ast):
         return ast
 
-    def read_brackets(self, ast):
-        return ast
-
-    def read_nobrackets(self, ast):
-        return ast
-
-    def update_start(self, ast):
-        return ast
-
     def update(self, ast):
         return ast
 
-    def update_brackets(self, ast):
-        return ast
-
-    def update_nobrackets(self, ast):
-        return ast
-
-    def delete_start(self, ast):
-        return ast
-
     def delete(self, ast):
-        return ast
-
-    def delete_brackets(self, ast):
-        return ast
-
-    def delete_nobrackets(self, ast):
-        return ast
-
-    def crudop_brackets(self, ast):
-        return ast
-
-    def crudop_nobrackets(self, ast):
         return ast
 
     def crud(self, ast):
