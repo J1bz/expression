@@ -46,8 +46,8 @@ Quickstart
   >>> print(repr(res))
   SELECT a
 
-.. note:: j1bz.expression.exceptions.ParseError should be the only exception
-  you have to catch when invoking interpret function.
+**Note**: ``j1bz.expression.exceptions.ParseError`` should be the only
+  exception you have to catch when invoking interpret function.
 
 Examples of expressions
 -----------------------
@@ -62,7 +62,7 @@ CREATE
   INSERT INTO i VALUES k:v;
   INSERT VALUES k:v; AS i
 
-.. note:: ``CREATE`` is a synonym of ``INSERT``. It means every time you can
+**Note**: ``CREATE`` is a synonym of ``INSERT``. It means every time you can
   use ``INSERT`` you could have used ``CREATE`` instead (for semantics in some
   cases).
 
