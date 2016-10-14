@@ -47,7 +47,7 @@ Quickstart
   SELECT a
 
 **Note**: ``j1bz.expression.exceptions.ParseError`` should be the only
-  exception you have to catch when invoking interpret function.
+exception you have to catch when invoking interpret function.
 
 Examples of expressions
 -----------------------
@@ -63,8 +63,8 @@ CREATE
   INSERT VALUES k:v; AS i
 
 **Note**: ``CREATE`` is a synonym of ``INSERT``. It means every time you can
-  use ``INSERT`` you could have used ``CREATE`` instead (for semantics in some
-  cases).
+use ``INSERT`` you could have used ``CREATE`` instead (for semantics in some
+cases).
 
 READ
 ~~~~
@@ -75,7 +75,7 @@ UPDATE
 DELETE
 ~~~~~~
 
-.. note:: Expression uses Grako (https://pypi.python.org/pypi/grako) to
-  generate a parser from a grammar defined in
-  ``etc/j1bz/expression/grammar.bnf``. You can read this bnf description to
-  check for all available possibilities.
+**Note**: Expression uses Grako (https://pypi.python.org/pypi/grako) to
+generate a parser from a grammar defined in
+``etc/j1bz/expression/grammar.bnf``. You can read this bnf description to check
+for all available possibilities.
