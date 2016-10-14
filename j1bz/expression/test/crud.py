@@ -22,6 +22,7 @@ class CrudTest(TestCase):
                 ("CREATE {k1: v1, k2: v2}", "CREATE {k2: v2, k1: v1}")
             ),
             ("INSERT INTO i VALUES k:v;", "CREATE i:{k: v}"),
+            ("INSERT VALUES k:v; AS i", "CREATE {k: v} AS i"),
 
             ("CREATE VALUES k:v;", "CREATE {k: v}"),
             (
@@ -29,6 +30,7 @@ class CrudTest(TestCase):
                 ("CREATE {k1: v1, k2: v2}", "CREATE {k2: v2, k1: v1}")
             ),
             ("CREATE INTO i VALUES k:v;", "CREATE i:{k: v}"),
+            ("CREATE VALUES k:v; AS i", "CREATE {k: v} AS i"),
         ]
 
         for create, expected in creates:
@@ -56,10 +58,14 @@ class CrudTest(TestCase):
             ("SELECT s LIMIT 10;", "READ s LIMIT 10"),
             # TODO: Fix repr method to display dparams correctly
             # ("SELECT s WITH 'k':v;", "READ s"),
+            ("SELECT s; AS mys", "READ s AS mys"),
 
             (
-                "SELECT s WHERE wh GROUP BY g ORDER BY o LIMIT 10;",
-                "READ s LIMIT 10 GROUP BY [g] ORDER BY [(o, u'ASC')] WHERE wh"
+                "SELECT s WHERE wh GROUP BY g ORDER BY o LIMIT 10; AS mys",
+                (
+                    "READ s LIMIT 10 GROUP BY [g] ORDER BY [(o, u'ASC')] "
+                    "WHERE wh AS mys"
+                )
             ),
 
             ("SELECT a, b, c;", "READ a, b, c"),
@@ -122,12 +128,12 @@ class CrudTest(TestCase):
             ("UPDATE VALUES k:v WHERE w;", "UPDATE {k: v} WHERE (w)"),
             ("UPDATE INTO u VALUES k:v WHERE w;", "UPDATE u:{k: v} WHERE (w)"),
 
-            # Dict representation is not determinist. What we want to test
-            # here is that either one of those expected result is a good one
             (
                 "UPDATE INTO u VALUES k1:v1, k2:v2;",
                 ("UPDATE u:{k1: v1, k2: v2}", "UPDATE u:{k2: v2, k1: v1}")
             ),
+
+            ("UPDATE VALUES k:v; AS myu", "UPDATE {k: v} AS myu"),
 
             # TODO: WITH
         ]
@@ -152,6 +158,7 @@ class CrudTest(TestCase):
             ("DELETE d1, d2, d3;", "DELETE d1, d2, d3"),
             ("DELETE d WHERE w;", "DELETE d WHERE w"),
             ("DELETE d1, d2, d3 WHERE w;", "DELETE d1, d2, d3 WHERE w"),
+            ("DELETE d; AS myd", "DELETE d AS myd"),
         ]
 
         for delete, expected in deletes:
