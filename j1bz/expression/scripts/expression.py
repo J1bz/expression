@@ -3,16 +3,15 @@
 
 from __future__ import unicode_literals
 
-from builtins import input
+from traceback import format_exc
 
-from grako.model import ModelBuilderSemantics
-from grako.exceptions import FailedParse
+from prompt_toolkit import prompt
 
-from j1bz.expression.walker import Walker
-from j1bz.expression.parser import get_parser
+from j1bz.expression.exceptions import ParseError
+from j1bz.expression.interpreter import Interpreter
 
 
-def cli_interpreter(parser, walker):
+def cli_interpreter(interpreter):
     print("=== Expression CLI interpreter ===")
     print("Enter 'QUIT' to quit")
     print("")
@@ -20,33 +19,30 @@ def cli_interpreter(parser, walker):
     cmd = ''
     while True:
         try:
-            cmd = input('> ')
+            cmd = prompt('> ')
+
         except EOFError:
             break
+
         except KeyboardInterrupt:
             break
-
-        if not cmd:
-            continue
 
         if cmd == 'QUIT':
             break
 
         try:
-            model = parser.parse(cmd, rule_name='start')
-        except FailedParse as e:
-            print('Failed to parse : {}'.format(e))
+            res = interpreter.interpret(cmd)
+
+        except ParseError as e:
+            print(format_exc(e))
             continue
 
-        res = walker.walk(model)
         print(repr(res))
 
 
 def main():
-    parser = get_parser(semantics=ModelBuilderSemantics())
-    walker = Walker()
-
-    cli_interpreter(parser, walker)
+    i = Interpreter()
+    cli_interpreter(i)
 
 
 if __name__ == '__main__':
