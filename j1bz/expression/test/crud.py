@@ -14,6 +14,28 @@ class CrudTest(TestCase):
         self.parser = get_parser(semantics=ModelBuilderSemantics())
         self.walker = Walker()
 
+    def test_values(self):
+        created_values = [
+            ("CREATE VALUES k: v;", "CREATE {k: v}"),
+            ("CREATE VALUES k: v.field.field;", "CREATE {k: v.field.field}"),
+            ("CREATE VALUES k: f();", "CREATE {k: f()}"),
+            ("CREATE VALUES k: f(v1.f, v2.f);", "CREATE {k: f(v1.f, v2.f)}"),
+            ("CREATE VALUES k: f(g());", "CREATE {k: f(g())}"),
+            ("CREATE VALUES k: 'v';", "CREATE {k: u'v'}"),
+            ('CREATE VALUES k: "v";', "CREATE {k: u'v'}"),
+            ("CREATE VALUES k: 1;", "CREATE {k: 1}"),
+            ("CREATE VALUES k: 1.1;", "CREATE {k: 1.1}"),
+            ("CREATE VALUES k: TRUE;", "CREATE {k: True}"),
+            ("CREATE VALUES k: FALSE;", "CREATE {k: False}"),
+            ("CREATE VALUES k: NULL;", "CREATE {k: None}"),
+        ]
+
+        for value, expected in created_values:
+            model = self.parser.parse(value)
+            res = self.walker.walk(model)
+
+            self.assertEqual(repr(res), expected)
+
     def test_create(self):
         creates = [
             ("INSERT VALUES k:v;", "CREATE {k: v}"),
