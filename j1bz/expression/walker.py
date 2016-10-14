@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 from grako.model import NodeWalker
 
 from b3j0f.requester.request.expr import Expression as E, Function as F
+from b3j0f.requester.request.consts import FuncName
 from b3j0f.requester.request.crud.create import Create
 from b3j0f.requester.request.crud.read import Read
 from b3j0f.requester.request.crud.update import Update
@@ -13,14 +14,6 @@ from b3j0f.requester.request.crud.delete import Delete
 
 
 class Walker(NodeWalker):
-    condop_table = {
-        'AND': 'and',
-        'OR': 'or',
-        'IN': 'in',
-        'NIN': 'nin',
-        'LIKE': 'like',
-    }
-
     def walk_forward_value(self, node):
         return self.walk(node.value)
 
@@ -86,7 +79,7 @@ class Walker(NodeWalker):
         return f
 
     def walk_condop(self, node):
-        return self.condop_table.get(node.value, node.value)
+        return getattr(FuncName, node.value, node.value)
 
     def walk_condition(self, node):
         cond = self.walk(node.left)

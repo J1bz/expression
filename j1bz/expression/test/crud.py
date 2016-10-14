@@ -75,26 +75,26 @@ class CrudTest(TestCase):
             ("SELECT s WHERE (a <= b);", "READ s WHERE (a <= b)"),
             ("SELECT s WHERE (a IN b);", "READ s WHERE (a in b)"),
             ("SELECT s WHERE (a NIN b);", "READ s WHERE nin(a, b)"),
-            ("SELECT s WHERE (a LIKE b);", "READ s WHERE like(a, b)"),
+            ("SELECT s WHERE (a LIKE b);", "READ s WHERE (a %% b)"),
 
-            ("SELECT s WHERE (a AND b);", "READ s WHERE and(a, b)"),
-            ("SELECT s WHERE (a OR b);", "READ s WHERE or(a, b)"),
+            ("SELECT s WHERE (a AND b);", "READ s WHERE (a & b)"),
+            ("SELECT s WHERE (a OR b);", "READ s WHERE (a | b)"),
 
             (
                 "SELECT s WHERE ((a OR b) AND c);",
-                "READ s WHERE and(or(a, b), c)"
+                "READ s WHERE ((a | b) & c)"
             ),
             (
                 "SELECT s WHERE (a OR (b AND c));",
-                "READ s WHERE or(a, and(b, c))"
+                "READ s WHERE (a | (b & c))"
             ),
             (
                 "SELECT s WHERE ((a > b) AND c);",
-                "READ s WHERE and((a > b), c)"
+                "READ s WHERE ((a > b) & c)"
             ),
             (
                 "SELECT s WHERE (a OR (b LIKE c));",
-                "READ s WHERE or(a, like(b, c))"
+                "READ s WHERE (a | (b %% c))"
             ),
 
             ("SELECT s GROUP BY g1, g2, g3;", "READ s GROUP BY [g1, g2, g3]"),
