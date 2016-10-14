@@ -35,14 +35,8 @@ identifier::forward_value = value:( function | expression ) ;
 (*/GENERIC *)
 
 (* CONDITION *)
-compterm::forward_value = value:value ;
-compop::compop = value:( "<=" | "<" | "=" | "!=" | ">=" | ">" | "IN" | "NIN" | "LIKE" ) ;
-compexpr_core::compexpr = left:compterm [ compop:compop right:compterm ] ;
-compexpr::forward_value = "(" value:compexpr_core ")" | value:compexpr_core ;
-
-condop::condop = value:( "AND" | "OR" ) ;
-condition_core::condition = left:condition condop:condop right:condition | left:compexpr ;
-condition::forward_value = "(" value:condition_core ")" | value:condition_core ;
+condop::condop = value:( "AND" | "OR" | "<=" | "<" | "=" | "!=" | ">=" | ">" | "IN" | "NIN" | "LIKE" ) ;
+condition::condition = "(" left:condition condop:condop right:condition ")" | "(" left:value ")" | left:value ;
 (*/CONDITION *)
 
 (* CRUD GENERIC *)

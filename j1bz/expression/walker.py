@@ -13,15 +13,12 @@ from b3j0f.requester.request.crud.delete import Delete
 
 
 class Walker(NodeWalker):
-    compop_table = {
-        'IN': 'in',
-        'NIN': 'nin',
-        'LIKE': 'like',
-    }
-
     condop_table = {
         'AND': 'and',
         'OR': 'or',
+        'IN': 'in',
+        'NIN': 'nin',
+        'LIKE': 'like',
     }
 
     def walk_forward_value(self, node):
@@ -87,20 +84,6 @@ class Walker(NodeWalker):
             f = f.as_(alias)
 
         return f
-
-    def walk_compop(self, node):
-        return self.compop_table.get(node.value, node.value)
-
-    def walk_compexpr(self, node):
-        expr = self.walk(node.left)
-
-        if node.compop is not None:
-            compop = self.walk(node.compop)
-            right = self.walk(node.right)
-
-            expr = F(compop, params=[expr, right])
-
-        return expr
 
     def walk_condop(self, node):
         return self.condop_table.get(node.value, node.value)

@@ -310,19 +310,14 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('forward_value')
-    def _compterm_(self):
-        self._value_()
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('compop')
-    def _compop_(self):
+    @graken('condop')
+    def _condop_(self):
         with self._group():
             with self._choice():
+                with self._option():
+                    self._token('AND')
+                with self._option():
+                    self._token('OR')
                 with self._option():
                     self._token('<=')
                 with self._option():
@@ -341,53 +336,7 @@ class ExpressionParser(Parser):
                     self._token('NIN')
                 with self._option():
                     self._token('LIKE')
-                self._error('expecting one of: != < <= = > >= IN LIKE NIN')
-        self.name_last_node('value')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('compexpr')
-    def _compexpr_core_(self):
-        self._compterm_()
-        self.name_last_node('left')
-        with self._optional():
-            self._compop_()
-            self.name_last_node('compop')
-            self._compterm_()
-            self.name_last_node('right')
-        self.ast._define(
-            ['compop', 'left', 'right'],
-            []
-        )
-
-    @graken('forward_value')
-    def _compexpr_(self):
-        with self._choice():
-            with self._option():
-                self._token('(')
-                self._compexpr_core_()
-                self.name_last_node('value')
-                self._token(')')
-            with self._option():
-                self._compexpr_core_()
-                self.name_last_node('value')
-            self._error('no available options')
-        self.ast._define(
-            ['value'],
-            []
-        )
-
-    @graken('condop')
-    def _condop_(self):
-        with self._group():
-            with self._choice():
-                with self._option():
-                    self._token('AND')
-                with self._option():
-                    self._token('OR')
-                self._error('expecting one of: AND OR')
+                self._error('expecting one of: != < <= = > >= AND IN LIKE NIN OR')
         self.name_last_node('value')
         self.ast._define(
             ['value'],
@@ -395,38 +344,28 @@ class ExpressionParser(Parser):
         )
 
     @graken('condition')
-    def _condition_core_(self):
+    def _condition_(self):
         with self._choice():
             with self._option():
+                self._token('(')
                 self._condition_()
                 self.name_last_node('left')
                 self._condop_()
                 self.name_last_node('condop')
                 self._condition_()
                 self.name_last_node('right')
+                self._token(')')
             with self._option():
-                self._compexpr_()
+                self._token('(')
+                self._value_()
+                self.name_last_node('left')
+                self._token(')')
+            with self._option():
+                self._value_()
                 self.name_last_node('left')
             self._error('no available options')
         self.ast._define(
             ['condop', 'left', 'right'],
-            []
-        )
-
-    @graken('forward_value')
-    def _condition_(self):
-        with self._choice():
-            with self._option():
-                self._token('(')
-                self._condition_core_()
-                self.name_last_node('value')
-                self._token(')')
-            with self._option():
-                self._condition_core_()
-                self.name_last_node('value')
-            self._error('no available options')
-        self.ast._define(
-            ['value'],
             []
         )
 
@@ -894,22 +833,7 @@ class ExpressionSemantics(object):
     def identifier(self, ast):
         return ast
 
-    def compterm(self, ast):
-        return ast
-
-    def compop(self, ast):
-        return ast
-
-    def compexpr_core(self, ast):
-        return ast
-
-    def compexpr(self, ast):
-        return ast
-
     def condop(self, ast):
-        return ast
-
-    def condition_core(self, ast):
         return ast
 
     def condition(self, ast):
