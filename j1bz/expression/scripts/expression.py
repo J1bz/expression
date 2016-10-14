@@ -8,10 +8,10 @@ from traceback import format_exc
 from prompt_toolkit import prompt
 
 from j1bz.expression.exceptions import ParseError
-from j1bz.expression.interpreter import Interpreter
+from j1bz.expression.interpreter import interpret
 
 
-def cli_interpreter(interpreter):
+def cli_interpreter():
     print("=== Expression CLI interpreter ===")
     print("Enter 'QUIT' to quit")
     print("")
@@ -31,7 +31,7 @@ def cli_interpreter(interpreter):
             break
 
         try:
-            res = interpreter.interpret(cmd)
+            res = interpret(cmd)
 
         except ParseError as e:
             print(format_exc(e))
@@ -41,8 +41,7 @@ def cli_interpreter(interpreter):
 
 
 def main():
-    i = Interpreter()
-    cli_interpreter(i)
+    cli_interpreter()
 
 
 if __name__ == '__main__':

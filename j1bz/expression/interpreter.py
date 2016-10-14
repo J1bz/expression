@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from six import raise_from
+
 from grako.model import ModelBuilderSemantics
 from grako.exceptions import ParseError as GrakoParseError
+
+from b3j0f.utils.runtime import singleton_per_scope
 
 from j1bz.expression.walker import Walker
 from j1bz.expression.parser import get_parser
 from j1bz.expression.exceptions import ParseError
+
+
+def interpret(expression, **kwargs):
+    return singleton_per_scope(Interpreter, **kwargs).interpret(expression)
 
 
 class Interpreter(object):
