@@ -1,5 +1,6 @@
 (* KEYWORDS *)
 
+@@keyword :: ALL
 @@keyword :: TRUE FALSE NULL
 @@keyword :: AND OR
 @@keyword :: IN NIN LIKE
@@ -58,7 +59,8 @@ create::create = ( "CREATE" | "INSERT" ) [ "INTO" name:identifier ] "VALUES" fie
 (*/CREATE *)
 
 (* READ *)
-read::read = ( "READ" | "SELECT" ) names:",".{ identifier }+ [ where:where ] [ groupby:groupby ] [ orderby:orderby ] [ limit:limit ] [ with:with ] ;
+all::all = "ALL" ;
+read::read = ( "READ" | "SELECT" ) ( all:all | names:",".{ identifier }+ ) [ where:where ] [ groupby:groupby ] [ orderby:orderby ] [ limit:limit ] [ with:with ] ;
 (*/READ *)
 
 (* UPDATE *)

@@ -25,6 +25,7 @@ __all__ = [
 ]
 
 KEYWORDS = set([
+    'ALL',
     'AND',
     'ASC',
     'BY',
@@ -526,6 +527,10 @@ class ExpressionParser(Parser):
             []
         )
 
+    @graken('all')
+    def _all_(self):
+        self._token('ALL')
+
     @graken('read')
     def _read_(self):
         with self._group():
@@ -535,14 +540,21 @@ class ExpressionParser(Parser):
                 with self._option():
                     self._token('SELECT')
                 self._error('expecting one of: READ SELECT')
+        with self._group():
+            with self._choice():
+                with self._option():
+                    self._all_()
+                    self.name_last_node('all')
+                with self._option():
 
-        def sep2():
-            self._token(',')
+                    def sep3():
+                        self._token(',')
 
-        def block2():
-            self._identifier_()
-        self._positive_closure(block2, sep=sep2)
-        self.name_last_node('names')
+                    def block3():
+                        self._identifier_()
+                    self._positive_closure(block3, sep=sep3)
+                    self.name_last_node('names')
+                self._error('no available options')
         with self._optional():
             self._where_()
             self.name_last_node('where')
@@ -559,7 +571,7 @@ class ExpressionParser(Parser):
             self._with_()
             self.name_last_node('with_')
         self.ast._define(
-            ['groupby', 'limit', 'names', 'orderby', 'where', 'with_'],
+            ['all', 'groupby', 'limit', 'names', 'orderby', 'where', 'with_'],
             []
         )
 
@@ -735,6 +747,9 @@ class ExpressionSemantics(object):
         return ast
 
     def create(self, ast):
+        return ast
+
+    def all(self, ast):
         return ast
 
     def read(self, ast):

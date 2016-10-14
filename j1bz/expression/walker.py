@@ -122,9 +122,18 @@ class Walker(NodeWalker):
 
         return Create(**kwargs)
 
+    def walk_all_(self, node):
+        print('hey')
+        return ''
+
     def walk_read(self, node):
+        if node.names:
+            select = [self.walk(name) for name in node.names]
+        else:
+            select = self.walk(node.all)
+
         kwargs = {
-            'select': [self.walk(name) for name in node.names],
+            'select': select,
             'limit': self.walk(node.limit),
             'dparams': self.walk(node.with_),
         }

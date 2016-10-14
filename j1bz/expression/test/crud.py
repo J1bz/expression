@@ -73,6 +73,7 @@ class CrudTest(TestCase):
         reads = [
             ("READ r;", "READ r"),
 
+            ("SELECT ALL;", "READ all"),
             ("SELECT s;", "READ s"),
             ("SELECT s WHERE w;", "READ s WHERE w"),
             ("SELECT s GROUP BY g;", "READ s GROUP BY [g]"),
