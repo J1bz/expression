@@ -53,7 +53,8 @@ setup(
     include_package_data=True,
     package_data={'j1bz.expression': ['etc/j1bz/expression/grammar.bnf']},
     url=URL,
-    download_url='https://github.com/j1bz/expression/tarball/0.0.1',
+    download_url='https://github.com/j1bz/expression/tarball/{}'.format(
+        VERSION),
     license='MIT License',
     classifiers=[
         'Development Status :: 4 - Beta',
