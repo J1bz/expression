@@ -1,5 +1,5 @@
-six
-grako
-prompt_toolkit
-b3j0f.utils
+six==1.10.0
+grako==3.16.0
+prompt_toolkit==1.0.7
+b3j0f.utils==1.4.4
 # b3j0f.requester
