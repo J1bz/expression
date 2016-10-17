@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from sys import prefix, modules
+from sys import modules
 from os.path import join, dirname
 from imp import new_module
 from six import exec_, raise_from
-from warnings import warn
 
 from grako.tool import genmodel
 from grako.exceptions import GrakoException
 from grako.codegen.python import codegen as pythoncg
 
 from j1bz.expression.default_parser import ExpressionParser as DefaultParser
-from j1bz.expression.exceptions import (
-    ParserGenerationError, GrammarFallbackWarning)
+from j1bz.expression.exceptions import ParserGenerationError
 
 
 def get_generated_parser(filename=None, **kwargs):
@@ -38,29 +36,14 @@ def get_generated_parser(filename=None, **kwargs):
     return ExpressionParser(**kwargs)
 
 
-def get_parser(fallback=False, **kwargs):
-    grammar = join(prefix, 'etc', 'j1bz', 'expression', 'grammar.bnf')
-    try:
-        return get_generated_parser(filename=grammar, **kwargs)
+def get_parser(grammar_file=None, **kwargs):
+    if grammar_file is None:
+        grammar_file = join(
+            dirname(__file__),
+            'etc', 'j1bz', 'expression', 'grammar.bnf'
+        )
 
-    except ParserGenerationError as e:
-        if fallback:
-            fallback_grammar = join(
-                dirname(__file__),
-                'etc', 'j1bz', 'expression', 'grammar.bnf'
-            )
-
-            warning = (
-                "Compilation of {} failed. Falling back on {}.".format(
-                    grammar, fallback_grammar
-                )
-            )
-            warn(warning, GrammarFallbackWarning)
-
-            return get_generated_parser(filename=fallback_grammar, **kwargs)
-
-        else:
-            raise e
+    return get_generated_parser(filename=grammar_file, **kwargs)
 
 
 def get_default_parser(**kwargs):
