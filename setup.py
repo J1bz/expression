@@ -4,15 +4,8 @@
 """j1bz.expression building script."""
 
 from setuptools import setup, find_packages
-from setuptools.command.install import install
-from pkg_resources import resource_filename
-from errno import EEXIST
 
-from os import listdir, makedirs, remove
-from os.path import abspath, dirname, join, isfile, isdir
-from shutil import copy
-
-from sys import prefix
+from os.path import abspath, dirname, join
 
 from re import compile as re_compile, S as re_S
 
@@ -48,41 +41,6 @@ DESCRIPTION = 'DSL expressing Crudity requests.'
 
 URL = 'https://github.com/{0}'.format(_namepath)
 
-
-class CustomInstall(install):
-    """
-    This custom installation class drops etc conf files in PREFIX/etc.
-    """
-    def run(self):
-        def makedir_p(path):
-            try:
-                makedirs(path)
-            except OSError as exc:
-                if exc.errno == EEXIST and isdir(path):
-                    pass
-                else:
-                    raise
-
-        etc = resource_filename(__name__, join('etc', 'j1bz', 'expression',))
-        print(etc)
-        etc_dist = join(prefix, etc)
-
-        print("Copying {} to {}".format(etc, etc_dist))
-        makedir_p(etc_dist)
-        for f in listdir(etc):
-            f_dist = join(etc_dist, f)
-            if isfile(f_dist):
-                remove(f_dist)
-
-            copy(join(etc, f), etc_dist)
-
-        # Here we should run this super class install.run method. But, as
-        # it is commented in the run method, a backward compatibility mode
-        # twists the behaviour we want. The expected behaviour is
-        # do_egg_install.
-        install.do_egg_install(self)
-
-
 setup(
     name=NAME,
     version=VERSION,
@@ -93,6 +51,7 @@ setup(
     description=DESCRIPTION,
     long_description=DESC,
     include_package_data=True,
+    package_data={'j1bz.expression': ['etc/j1bz/expression/grammar.bnf']},
     url=URL,
     license='MIT License',
     classifiers=[
@@ -120,9 +79,6 @@ setup(
         'console_scripts': [
             'expression-cli = j1bz.expression.scripts.expression:main',
         ],
-    },
-    cmdclass={
-        'install': CustomInstall,
     },
     keywords=KEYWORDS
 )

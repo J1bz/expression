@@ -7,8 +7,8 @@ from traceback import format_exc
 
 from prompt_toolkit import prompt
 
-from j1bz.expression.exceptions import ParserGenerationError, ParseError
 from j1bz.expression.interpreter import interpret
+from j1bz.expression.exceptions import ParserGenerationError, ParseError
 
 
 def cli_interpreter():

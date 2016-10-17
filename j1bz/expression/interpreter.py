@@ -21,13 +21,13 @@ class Interpreter(object):
             self,
             parser=None, walker=None,
             pkwargs={'rule_name': 'start'}, wkwargs={},
-            default_parser_fallback=False
+            default_fallback=True
     ):
         if parser:
             self.parser = parser
         else:
             self.parser = get_parser(
-                default_fallback=default_parser_fallback,
+                fallback=default_fallback,
                 semantics=ModelBuilderSemantics()
             )
 
