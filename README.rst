@@ -131,5 +131,5 @@ DELETE
 
 **Note**: Expression uses Grako (https://pypi.python.org/pypi/grako) to
 generate a parser from a grammar defined in
-``etc/j1bz/expression/grammar.bnf``. You can read this bnf description to check
-for all available possibilities.
+``j1bz/expression/etc/j1bz/expression/grammar.bnf``. You can read this bnf
+description to check for all available possibilities.
