@@ -432,20 +432,13 @@ class ExpressionParser(Parser):
             []
         )
 
-    @graken('groupby')
+    @graken('forward_value')
     def _groupby_(self):
         self._token('GROUP BY')
-
-        def sep1():
-            self._token(',')
-
-        def block1():
-            self._identifier_()
-            self.name_last_node('name')
-        self._positive_closure(block1, sep=sep1)
-        self.name_last_node('values')
+        self._identifier_()
+        self.name_last_node('value')
         self.ast._define(
-            ['name', 'values'],
+            ['value'],
             []
         )
 

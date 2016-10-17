@@ -76,7 +76,7 @@ class CrudTest(TestCase):
             ("SELECT ALL;", "READ all"),
             ("SELECT s;", "READ s"),
             ("SELECT s WHERE w;", "READ s WHERE w"),
-            ("SELECT s GROUP BY g;", "READ s GROUP BY [g]"),
+            ("SELECT s GROUP BY g;", "READ s GROUP BY g"),
             ("SELECT s ORDER BY o;", "READ s ORDER BY [(o, u'ASC')]"),
             ("SELECT s LIMIT 10;", "READ s LIMIT 10"),
             # TODO: Fix repr method to display dparams correctly
@@ -86,7 +86,7 @@ class CrudTest(TestCase):
             (
                 "SELECT s WHERE wh GROUP BY g ORDER BY o LIMIT 10; AS mys",
                 (
-                    "READ s LIMIT 10 GROUP BY [g] ORDER BY [(o, u'ASC')] "
+                    "READ s LIMIT 10 GROUP BY g ORDER BY [(o, u'ASC')] "
                     "WHERE wh AS mys"
                 )
             ),
@@ -125,8 +125,6 @@ class CrudTest(TestCase):
                 "SELECT s WHERE (a OR (b LIKE c));",
                 "READ s WHERE (a | (b %% c))"
             ),
-
-            ("SELECT s GROUP BY g1, g2, g3;", "READ s GROUP BY [g1, g2, g3]"),
 
             (
                 "SELECT s ORDER BY o1, o2;",

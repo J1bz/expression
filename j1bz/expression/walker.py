@@ -98,9 +98,6 @@ class Walker(NodeWalker):
     def walk_kvs(self, node):
         return {k: v for (k, v) in [self.walk(kv) for kv in node.kvs]}
 
-    def walk_groupby(self, node):
-        return [self.walk(group) for group in node.values_]
-
     def walk_sorter(self, node):
         mod = 'DESC' if node.sortmod == 'DESC' else 'ASC'
         name = self.walk(node.name)

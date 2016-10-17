@@ -100,8 +100,6 @@ READ
   SELECT s WHERE (a OR b);
   SELECT s WHERE (a OR (b AND c));
 
-  SELECT s GROUP BY g1, g2, g3;
-
   SELECT s ORDER BY o1, o2;
   SELECT s ORDER BY o1 DESC, o2, o3 ASC;
 

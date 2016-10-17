@@ -47,7 +47,7 @@ strkey_value::kv = key:string ":" value:value ;
 strkeys_values::kvs = kvs:",".{ strkey_value }+ ;
 
 where::forward_value = "WHERE" value:condition ;
-groupby::groupby = "GROUP BY" values:",".{ name:identifier }+ ;
+groupby::forward_value = "GROUP BY" value:identifier ;
 sorter::sorter = name:identifier sortmod:[ "ASC" | "DESC" ] ;
 orderby::orderby = "ORDER BY" values:",".{ sorter:sorter }+ ;
 limit::forward_value = "LIMIT" value:integer ;
