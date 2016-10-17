@@ -70,6 +70,7 @@ class CustomInstall(install):
                     raise
 
         etc = resource_filename(__name__, join('etc', 'j1bz', 'expression',))
+        print(etc)
         etc_dist = join(prefix, etc)
 
         print("Copying {} to {}".format(etc, etc_dist))
