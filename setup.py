@@ -37,7 +37,7 @@ DEPENDENCIES = []
 with open(join(BASEPATH, 'requirements.txt')) as f:
     DEPENDENCIES = list(line.strip() for line in f.readlines())
 
-DESCRIPTION = 'DSL expressing Crudity requests.'
+DESCRIPTION = 'DSL intended to express requests for b3j0f.crudity.'
 
 URL = 'https://github.com/{0}'.format(_namepath)
 
