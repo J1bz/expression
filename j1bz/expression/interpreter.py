@@ -20,12 +20,16 @@ class Interpreter(object):
     def __init__(
             self,
             parser=None, walker=None,
-            pkwargs={'rule_name': 'start'}, wkwargs={}
+            pkwargs={'rule_name': 'start'}, wkwargs={},
+            default_parser_fallback=False
     ):
         if parser:
             self.parser = parser
         else:
-            self.parser = get_parser(semantics=ModelBuilderSemantics())
+            self.parser = get_parser(
+                default_fallback=default_parser_fallback,
+                semantics=ModelBuilderSemantics()
+            )
 
         if walker:
             self.walker = walker

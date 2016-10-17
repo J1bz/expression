@@ -7,7 +7,7 @@ from traceback import format_exc
 
 from prompt_toolkit import prompt
 
-from j1bz.expression.exceptions import ParseError
+from j1bz.expression.exceptions import ParserGenerationError, ParseError
 from j1bz.expression.interpreter import interpret
 
 
@@ -33,7 +33,7 @@ def cli_interpreter():
         try:
             res = interpret(cmd)
 
-        except ParseError as e:
+        except (ParserGenerationError, ParseError) as e:
             print(format_exc(e))
             continue
 
