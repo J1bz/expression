@@ -223,11 +223,11 @@ Exception handling
 
 ``j1bz.expression.exceptions`` currently defines 2 exceptions :
 
-  - ``ParserGenerationError`` : Raised when you provide a custom grammar in
-    order to generate a   parser, but generation failed (your grammar is not
-    correct !).
-  - ``ParseError`` : Raised when an expression given to ``interpret()`` is not
-    parsable.
+- ``ParserGenerationError`` : Raised when you provide a custom grammar in
+  order to generate a   parser, but generation failed (your grammar is not
+  correct !).
+- ``ParseError`` : Raised when an expression given to ``interpret()`` is not
+  parsable.
 
 Some other exceptions (``IOError``, ``OSError``, ``FileNotFoundError``) can
 also be raised when trying to compile a custom parser if the grammar file is
