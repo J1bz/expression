@@ -1,3 +1,21 @@
+Summary
+=======
+
+* `Description`_
+  * `Crudity expressions, cool ! But... what is it ?`_
+* `Installation`_
+* `How-to`_
+  * `Quickstart`_
+  * `Examples of expressions`_ 
+    * `CREATE`_
+    * `READ`_
+    * `UPDATE`_
+    * `DELETE`_
+* `Advanced how-to`_
+  * `Using a custom grammar`_
+  * `\`\`Interpreter\`\` vs \`\`interpret\`\``_
+  * `Exception handling`_
+
 Description
 ===========
 
@@ -7,7 +25,7 @@ for ``b3j0f.crudity`` (https://github.com/b3j0f/requester/).
 In other words, you can write Crudity Expressions.
 
 Crudity expressions, cool ! But... what is it ?
-------------------------------------------------
+-----------------------------------------------
 
 This package has been designed to work in strong coupling with
 ``b3j0f.requester``, so you should know what it is before continuing.
