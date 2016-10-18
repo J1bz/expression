@@ -2,18 +2,24 @@ Summary
 =======
 
 * `Description`_
+
   * `Crudity expressions, cool ! But... what is it ?`_
+
 * `Installation`_
 * `How-to`_
+
   * `Quickstart`_
   * `Examples of expressions`_ 
+
     * `CREATE`_
     * `READ`_
     * `UPDATE`_
     * `DELETE`_
+
 * `Advanced how-to`_
+
   * `Using a custom grammar`_
-  * `\`\`Interpreter\`\` vs \`\`interpret\`\``_
+  * `Interpreter vs interpret`_
   * `Exception handling`_
 
 Description
@@ -212,8 +218,8 @@ your ``interpret()`` calls :
 without grammar file), the same parser used for the first time will be used
 later (due to a singleton mechanic). 
 
-``Interpreter`` vs ``interpret``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Interpreter vs interpret
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``interpret()`` uses a singleton mechanic to provide a shortcut.
 
