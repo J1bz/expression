@@ -120,7 +120,6 @@ class Walker(NodeWalker):
         return Create(**kwargs)
 
     def walk_all_(self, node):
-        print('hey')
         return ''
 
     def walk_read(self, node):
