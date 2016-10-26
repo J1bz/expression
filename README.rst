@@ -37,12 +37,12 @@ This package has been designed to work in strong coupling with
 ``b3j0f.requester``, so you should know what it is before continuing.
 
 In ``b3j0f.requester``, everything is an ``Expression`` (``E``) or a
-``Function`` (``F``). If you want to compare ``a`` and ``b`` you need to write
-:
+``Function`` (``F``). If you want to access objects with a condition on ``a``
+and ``b`` you need to write :
 
 .. code-block:: python
 
-   >>> F('>', params=[E.a, E.b])
+   >>> Read(select='', where=(E.a > E.b))
 
 A programmer can manipulate those nested function calls with no problem, but
 people with less technical background will find difficulties doing it.
